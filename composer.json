@@ -1,0 +1,23 @@
+{
+    "name": "flamecore/seabreeze",
+    "description": "Deployment tool for database-driven PHP applications",
+    "type": "project",
+    "homepage": "http://www.flamecore.org",
+    "keywords": ["deployment"],
+    "license": "ISC",
+    "authors": [
+        {
+            "name": "Christian Neff",
+            "email": "christian.neff@gmail.com",
+            "homepage": "http://www.secondtruth.de",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/FlameCore/Seabreeze/issues",
+        "source": "https://github.com/FlameCore/Seabreeze"
+    },
+    "require": {
+        "php": ">=5.4"
+    }
+}
