@@ -71,10 +71,11 @@ class ConsoleProgressResponder extends AbstractConsoleResponder
 
     protected function onStatus(array $data)
     {
-        if (!isset($data['progress']))
-            return;
-
-        $this->progress->setCurrent((int) $data['progress']);
+        if (isset($data['current'])) {
+            $this->progress->setCurrent((int) $data['current']);
+        } else {
+            $this->progress->advance();
+        }
     }
 
     protected function onFinish()
