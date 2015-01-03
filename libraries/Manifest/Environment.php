@@ -30,25 +30,47 @@ namespace FlameCore\Seabreeze\Manifest;
  */
 class Environment implements ManifestInterface
 {
+    /**
+     * @var string
+     */
     protected $name;
 
+    /**
+     * @var \FlameCore\Seabreeze\Manifest\SynchronizerSettings[]
+     */
     protected $synchronizers = array();
 
+    /**
+     * @var array
+     */
     protected $tasks = array();
 
+    /**
+     * @var \FlameCore\Seabreeze\Manifest\Project
+     */
     protected $project;
 
+    /**
+     * @param string $name
+     * @param \FlameCore\Seabreeze\Manifest\Project $project
+     */
     public function __construct($name, Project $project)
     {
         $this->name = (string) $name;
         $this->project = $project;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return "environments/$this->name";
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function import(array $configuration)
     {
         if (isset($configuration['synchronizers'])) {
@@ -67,6 +89,9 @@ class Environment implements ManifestInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function export()
     {
         $data = array();
@@ -82,52 +107,86 @@ class Environment implements ManifestInterface
         return $data;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function flush()
     {
         $project = $this->getProject();
         $project->writeManifest($this);
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     */
     public function setName($name)
     {
         $this->name = (string) $name;
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function hasSynchronizer($name)
     {
         return isset($this->synchronizers[$name]);
     }
 
+    /**
+     * @return \FlameCore\Seabreeze\Manifest\SynchronizerSettings[]
+     */
     public function getSynchronizers()
     {
         return $this->synchronizers;
     }
 
+    /**
+     * @param string $name
+     * @return \FlameCore\Seabreeze\Manifest\SynchronizerSettings
+     */
     public function getSynchronizer($name)
     {
         return isset($this->synchronizers[$name]) ? $this->synchronizers[$name] : null;
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function hasTask($name)
     {
         return isset($this->tasks[$name]);
     }
 
+    /**
+     * @return array
+     */
     public function getTasks()
     {
         return $this->tasks;
     }
 
+    /**
+     * @param string $name
+     * @return array
+     */
     public function getTask($name)
     {
         return isset($this->tasks[$name]) ? $this->tasks[$name] : null;
     }
 
+    /**
+     * @return \FlameCore\Seabreeze\Manifest\Project
+     */
     public function getProject()
     {
         return $this->project;

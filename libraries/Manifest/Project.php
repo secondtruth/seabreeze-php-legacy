@@ -32,28 +32,49 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Project implements ManifestInterface
 {
+    /**
+     * @var string
+     */
     protected $path;
 
+    /**
+     * @var string
+     */
     protected $name = 'Project';
 
+    /**
+     * @var \FlameCore\Seabreeze\Manifest\Environment[]
+     */
     protected $environments;
 
+    /**
+     * @param string $directory
+     */
     public function __construct($directory)
     {
         $this->path = (string) $directory;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return 'config';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function import(array $configuration)
     {
         if (isset($configuration['name']) && !empty($configuration['name']))
             $this->name = (string) $configuration['name'];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function export()
     {
         return array(
@@ -61,6 +82,9 @@ class Project implements ManifestInterface
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function flush()
     {
         $this->writeManifest($this);
@@ -70,42 +94,69 @@ class Project implements ManifestInterface
         }
     }
 
+    /**
+     * @return string
+     */
     public function getPath()
     {
         return $this->path;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     */
     public function setName($name)
     {
         $this->name = (string) $name;
     }
 
+    /**
+     * @param string $environment
+     * @return bool
+     */
     public function hasEnvironment($environment)
     {
         return isset($this->environments[$environment]);
     }
 
+    /**
+     * @return \FlameCore\Seabreeze\Manifest\Environment[]
+     */
     public function getEnvironments()
     {
         return $this->environments;
     }
 
+    /**
+     * @param string $environment
+     * @return \FlameCore\Seabreeze\Manifest\Environment
+     */
     public function getEnvironment($environment)
     {
         return isset($this->environments[$environment]) ? $this->environments[$environment] : null;
     }
 
+    /**
+     * @param \FlameCore\Seabreeze\Manifest\Environment $environment
+     */
     public function addEnvironment(Environment $environment)
     {
         $name = $environment->getName();
         $this->environments[$name] = $environment;
     }
 
+    /**
+     * @param \FlameCore\Seabreeze\Manifest\ManifestInterface $object
+     * @param bool $mustExist
+     */
     public function writeManifest(ManifestInterface $object, $mustExist = false)
     {
         $filename = self::makeManifestPath($this->path, "$object.yml");
@@ -121,6 +172,10 @@ class Project implements ManifestInterface
         file_put_contents($filename, $yaml);
     }
 
+    /**
+     * @param string $directory
+     * @return \FlameCore\Seabreeze\Manifest\Project
+     */
     public static function fromDirectory($directory)
     {
         $configuration = Yaml::parse(self::makeManifestPath($directory, 'config.yml'));
@@ -143,6 +198,10 @@ class Project implements ManifestInterface
         return $project;
     }
 
+    /**
+     * @param string $directory
+     * @return bool
+     */
     public static function exists($directory)
     {
         try {
@@ -153,6 +212,11 @@ class Project implements ManifestInterface
         }
     }
 
+    /**
+     * @param string $directory
+     * @param string $manifest
+     * @return string
+     */
     private static function makeManifestPath($directory, $manifest)
     {
         if (!is_dir($directory))

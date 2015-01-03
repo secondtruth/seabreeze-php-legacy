@@ -33,10 +33,20 @@ use Symfony\Component\Console\Helper\ProgressBar;
  */
 class ConsoleProgressResponder extends AbstractConsoleResponder
 {
+    /**
+     * @var array
+     */
     protected $options;
 
+    /**
+     * @var \Symfony\Component\Console\Helper\ProgressBar
+     */
     protected $progress;
 
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param array $options
+     */
     public function __construct(OutputInterface $output, array $options = [])
     {
         parent::__construct($output);
@@ -48,6 +58,9 @@ class ConsoleProgressResponder extends AbstractConsoleResponder
         $this->setListener('*.task.finish', [$this, 'onFinish']);
     }
 
+    /**
+     * @param array $data
+     */
     protected function onStart(array $data)
     {
         $format = isset($this->options['format']) ? $this->options['format'] : 'normal';
@@ -69,6 +82,9 @@ class ConsoleProgressResponder extends AbstractConsoleResponder
         $this->progress = $progress;
     }
 
+    /**
+     * @param array $data
+     */
     protected function onStatus(array $data)
     {
         if (isset($data['current'])) {
@@ -78,6 +94,9 @@ class ConsoleProgressResponder extends AbstractConsoleResponder
         }
     }
 
+    /**
+     * @param array $data
+     */
     protected function onFinish()
     {
         $this->progress->finish();

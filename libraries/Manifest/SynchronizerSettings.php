@@ -30,16 +30,36 @@ namespace FlameCore\Seabreeze\Manifest;
  */
 class SynchronizerSettings
 {
+    /**
+     * @var string
+     */
     protected $mode;
 
+    /**
+     * @var array
+     */
     protected $source = array();
 
+    /**
+     * @var array
+     */
     protected $targets = array();
 
+    /**
+     * @var array
+     */
     protected $excludes = array();
 
+    /**
+     * @var \FlameCore\Seabreeze\Manifest\Environment
+     */
     protected $environment;
 
+    /**
+     * @param string $mode
+     * @param array $settings
+     * @param \FlameCore\Seabreeze\Manifest\Environment $environment
+     */
     public function __construct($mode, array $settings, Environment $environment)
     {
         if (!isset($settings['from']) || !is_array($settings['from']))
@@ -57,6 +77,9 @@ class SynchronizerSettings
             $this->excludes = (array) $settings['exclude'];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function export()
     {
         $data = array(
@@ -70,46 +93,73 @@ class SynchronizerSettings
         return $data;
     }
 
+    /**
+     * @return string
+     */
     public function getMode()
     {
         return $this->mode;
     }
 
+    /**
+     * @return array
+     */
     public function getSource()
     {
         return $this->source;
     }
 
+    /**
+     * @param string $source
+     */
     public function setSource($source)
     {
         $this->source = $source;
     }
 
+    /**
+     * @return array
+     */
     public function getTargets()
     {
         return $this->targets;
     }
 
+    /**
+     * @param array $target
+     */
     public function addTarget(array $target)
     {
         $this->targets[] = $target;
     }
 
+    /**
+     * @return array
+     */
     public function getExcludes()
     {
         return $this->excludes;
     }
 
+    /**
+     * @param array $excludes
+     */
     public function setExcludes(array $excludes)
     {
         $this->excludes = $excludes;
     }
 
+    /**
+     * @param string $exclude
+     */
     public function exclude($exclude)
     {
         $this->excludes[] = $exclude;
     }
 
+    /**
+     * @return \FlameCore\Seabreeze\Manifest\Environment
+     */
     public function getEnvironment()
     {
         return $this->environment;

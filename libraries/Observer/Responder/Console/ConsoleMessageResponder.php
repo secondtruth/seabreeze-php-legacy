@@ -32,6 +32,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ConsoleMessageResponder extends AbstractConsoleResponder
 {
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
     public function __construct(OutputInterface $output)
     {
         parent::__construct($output);
@@ -41,6 +44,9 @@ class ConsoleMessageResponder extends AbstractConsoleResponder
         $this->setListener('*.error',   [$this, 'onError']);
     }
 
+    /**
+     * @param array $data
+     */
     protected function onNotice(array $data)
     {
         if (!isset($data['message']))
@@ -49,6 +55,9 @@ class ConsoleMessageResponder extends AbstractConsoleResponder
         $this->output->writeln($data['message']);
     }
 
+    /**
+     * @param array $data
+     */
     protected function onWarning(array $data)
     {
         if (!isset($data['message']))
@@ -57,6 +66,9 @@ class ConsoleMessageResponder extends AbstractConsoleResponder
         $this->output->writeln(sprintf('<comment>%s</comment>', $data['message']));
     }
 
+    /**
+     * @param array $data
+     */
     protected function onError(array $data)
     {
         if (!isset($data['message']))

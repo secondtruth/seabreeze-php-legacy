@@ -33,13 +33,22 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class AbstractConsoleResponder extends Responder
 {
+    /**
+     * @var \Symfony\Component\Console\Output\OutputInterface
+     */
     protected $output;
 
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
     public function __construct(OutputInterface $output)
     {
         $this->output = $output;
     }
 
+    /**
+     * @return \Symfony\Component\Console\Output\OutputInterface
+     */
     public function getOutput()
     {
         return $this->output;

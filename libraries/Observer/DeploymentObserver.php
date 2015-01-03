@@ -33,6 +33,9 @@ use FlameCore\Observer\Provider\ProviderInterface;
  */
 class DeploymentObserver extends Observer
 {
+    /**
+     * @param \FlameCore\Observer\Provider\ProviderInterface $provider
+     */
     public function __construct(ProviderInterface $provider)
     {
         $responder = $provider->getResponder('progress');

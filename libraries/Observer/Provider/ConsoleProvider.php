@@ -34,6 +34,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ConsoleProvider extends Provider
 {
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param array $options
+     */
     public function __construct(OutputInterface $output, array $options = [])
     {
         $responder = new ConsoleMessageResponder($output);

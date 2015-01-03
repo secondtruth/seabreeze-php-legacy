@@ -35,8 +35,14 @@ class Application extends BaseApplication
     const TITLE = 'Seabreeze Deployment';
     const VERSION = '0.1';
 
+    /**
+     * @var string
+     */
     protected $workingDir;
 
+    /**
+     * @param string $workingDir
+     */
     public function __construct($workingDir)
     {
         if (function_exists('ini_set') && extension_loaded('xdebug')) {
@@ -52,18 +58,24 @@ class Application extends BaseApplication
         parent::__construct(self::TITLE, self::VERSION);
     }
 
+    /**
+     * @return string
+     */
     public function getWorkingDir()
     {
         return $this->workingDir;
     }
 
+    /**
+     * @param string $workingDir
+     */
     public function setWorkingDir($workingDir)
     {
         $this->workingDir = realpath($workingDir);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function renderException($exception, $output)
     {
@@ -73,7 +85,7 @@ class Application extends BaseApplication
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getDefaultCommands()
     {

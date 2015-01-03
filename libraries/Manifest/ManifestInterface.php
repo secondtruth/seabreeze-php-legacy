@@ -30,11 +30,23 @@ namespace FlameCore\Seabreeze\Manifest;
  */
 interface ManifestInterface
 {
+    /**
+     * @return string
+     */
     public function __toString();
 
+    /**
+     * @param array $configuration
+     */
     public function import(array $configuration);
 
+    /**
+     * @return array
+     */
     public function export();
 
+    /**
+     * @return void
+     */
     public function flush();
 }

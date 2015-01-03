@@ -36,6 +36,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class InitializeCommand extends Command
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this->setName('init')
@@ -43,6 +46,9 @@ class InitializeCommand extends Command
              ->addOption('name', null, InputOption::VALUE_REQUIRED, 'The name of the project');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $directory = $this->getApplication()->getWorkingDir();
