@@ -167,8 +167,14 @@ class Project implements ManifestInterface
             mkdir($directory, 0755, true);
         }
 
-        if ($mustExist && !is_writable($filename)) {
-            throw new \DomainException(sprintf('Manifest file "%s" missing or unwritable.', $filename));
+        if (is_file($filename)) {
+            if (!is_writable($filename)) {
+                throw new \DomainException(sprintf('Manifest file "%s" unwritable.', $filename));
+            }
+        } else {
+            if ($mustExist) {
+                throw new \DomainException(sprintf('Manifest file "%s" missing.', $filename));
+            }
         }
 
         $yaml = Yaml::dump($object->export(), 4);
@@ -210,7 +216,7 @@ class Project implements ManifestInterface
         try {
             self::makeManifestPath($directory, 'config.yml');
             return true;
-        } catch (LogicException $e) {
+        } catch (\LogicException $e) {
             return false;
         }
     }
