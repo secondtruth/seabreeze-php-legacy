@@ -62,19 +62,22 @@ class SynchronizerSettings
      */
     public function __construct($mode, array $settings, Environment $environment)
     {
-        if (!isset($settings['from']) || !is_array($settings['from']))
+        if (!isset($settings['from']) || !is_array($settings['from'])) {
             throw new \InvalidArgumentException(sprintf('Synchronizer settings for "%s" do not contain "from" key.', $this->mode));
+        }
 
-        if (!isset($settings['to']) || !is_array($settings['to']))
+        if (!isset($settings['to']) || !is_array($settings['to'])) {
             throw new \InvalidArgumentException(sprintf('Synchronizer settings for "%s" do not contain "to" key.', $this->mode));
+        }
 
         $this->mode = strtolower($mode);
         $this->environment = $environment;
         $this->source = $settings['from'];
         $this->targets = $settings['to'];
 
-        if (isset($settings['exclude']) && !empty($settings['exclude']))
+        if (isset($settings['exclude']) && !empty($settings['exclude'])) {
             $this->excludes = (array) $settings['exclude'];
+        }
     }
 
     /**
@@ -87,8 +90,9 @@ class SynchronizerSettings
             'to' => $this->targets
         );
 
-        if (!empty($this->excludes))
+        if (!empty($this->excludes)) {
             $data['exclude'] = $this->excludes;
+        }
 
         return $data;
     }

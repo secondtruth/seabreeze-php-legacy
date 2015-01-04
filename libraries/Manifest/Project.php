@@ -68,8 +68,9 @@ class Project implements ManifestInterface
      */
     public function import(array $configuration)
     {
-        if (isset($configuration['name']) && !empty($configuration['name']))
+        if (isset($configuration['name']) && !empty($configuration['name'])) {
             $this->name = (string) $configuration['name'];
+        }
     }
 
     /**
@@ -162,11 +163,13 @@ class Project implements ManifestInterface
         $filename = self::makeManifestPath($this->path, "$object.yml");
         $directory = dirname($filename);
 
-        if (!is_dir($directory))
+        if (!is_dir($directory)) {
             mkdir($directory, 0755, true);
+        }
 
-        if ($mustExist && !is_writable($filename))
+        if ($mustExist && !is_writable($filename)) {
             throw new \DomainException(sprintf('Manifest file "%s" missing or unwritable.', $filename));
+        }
 
         $yaml = Yaml::dump($object->export(), 4);
         file_put_contents($filename, $yaml);
@@ -219,13 +222,15 @@ class Project implements ManifestInterface
      */
     private static function makeManifestPath($directory, $manifest)
     {
-        if (!is_dir($directory))
+        if (!is_dir($directory)) {
             throw new \DomainException(sprintf('Directory "%s" does not exist.', $directory));
+        }
 
         $manifestDir = $directory . DIRECTORY_SEPARATOR . '.seabreeze';
 
-        if (!is_dir($manifestDir))
+        if (!is_dir($manifestDir)) {
             throw new \LogicException(sprintf('Directory "%s" contains no manifest.', $directory));
+        }
 
         return realpath($manifestDir . DIRECTORY_SEPARATOR . $manifest);
     }

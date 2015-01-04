@@ -53,13 +53,15 @@ class InitializeCommand extends Command
     {
         $directory = $this->getApplication()->getWorkingDir();
 
-        if (Project::exists($directory))
+        if (Project::exists($directory)) {
             throw new \DomainException(sprintf('Directory does already contain a manifest.', $directory));
+        }
 
         $project = new Project($directory);
 
-        if ($name = $input->getOption('name'))
+        if ($name = $input->getOption('name')) {
             $project->setName($name);
+        }
 
         $project->flush();
 

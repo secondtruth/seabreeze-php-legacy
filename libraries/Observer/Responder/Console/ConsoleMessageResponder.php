@@ -49,8 +49,9 @@ class ConsoleMessageResponder extends AbstractConsoleResponder
      */
     protected function onNotice(array $data)
     {
-        if (!isset($data['message']))
+        if (!isset($data['message'])) {
             return;
+        }
 
         $this->output->writeln($data['message']);
     }
@@ -60,8 +61,9 @@ class ConsoleMessageResponder extends AbstractConsoleResponder
      */
     protected function onWarning(array $data)
     {
-        if (!isset($data['message']))
+        if (!isset($data['message'])) {
             return;
+        }
 
         $this->output->writeln(sprintf('<comment>%s</comment>', $data['message']));
     }
@@ -71,8 +73,9 @@ class ConsoleMessageResponder extends AbstractConsoleResponder
      */
     protected function onError(array $data)
     {
-        if (!isset($data['message']))
+        if (!isset($data['message'])) {
             return;
+        }
 
         $this->output->writeln(sprintf('<error>%s</error>', $data['message']));
     }
