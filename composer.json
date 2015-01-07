@@ -19,6 +19,7 @@
     },
     "require": {
         "php": ">=5.4",
+        "flamecore/synchronizer": "dev-master",
         "flamecore/observer": "~1.1",
         "symfony/yaml": "~2.5",
         "symfony/console": "~2.5"
