@@ -25,6 +25,7 @@ namespace FlameCore\Seabreeze\Observer\Provider;
 
 use FlameCore\Seabreeze\Observer\Responder\Console\ConsoleMessageResponder;
 use FlameCore\Seabreeze\Observer\Responder\Console\ConsoleProgressResponder;
+use FlameCore\Observer\Provider\Provider;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
