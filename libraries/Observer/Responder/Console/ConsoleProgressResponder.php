@@ -65,8 +65,12 @@ class ConsoleProgressResponder extends AbstractConsoleResponder
     {
         $format = isset($this->options['format']) ? $this->options['format'] : 'normal';
 
-        $maxSteps = isset($data['total']) ? (int) $data['total'] : 0;
-        unset($data['total']);
+        if (isset($data['total']) && $data['total'] > 0) {
+            $maxSteps = (int) $data['total'];
+            unset($data['total']);
+        } else {
+            $maxSteps = 1;
+        }
 
         $progress = new ProgressBar($this->output, $maxSteps);
         $progress->setFormat($format);
@@ -95,7 +99,7 @@ class ConsoleProgressResponder extends AbstractConsoleResponder
     }
 
     /**
-     * @param array $data
+     * @return void
      */
     protected function onFinish()
     {
