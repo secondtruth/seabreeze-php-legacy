@@ -45,8 +45,14 @@ class Deployer
     protected $observer;
 
     /**
+     * @var array
+     */
+    protected $failed = array();
+
+    /**
      * @param \FlameCore\Seabreeze\Manifest\Environment $environment
      * @param bool $preserve
+     * @return bool
      */
     public function deploy(Environment $environment, $preserve = true)
     {
@@ -75,13 +81,19 @@ class Deployer
                     $synchronizer->observe($this->observer);
                 }
 
-                $synchronizer->synchronize($preserve);
+                $result = $synchronizer->synchronize($preserve);
+
+                if ($result !== null && !$result) {
+                    $this->failed[] = $mode;
+                }
             }
         }
 
         if ($this->observer) {
             $this->observer->notify('deploy.finish');
         }
+
+        return empty($this->failed);
     }
 
     /**
@@ -108,6 +120,14 @@ class Deployer
     public function observe(ObserverInterface $observer)
     {
         $this->observer = $observer;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFailed()
+    {
+        return $this->failed;
     }
 
     /**
