@@ -46,6 +46,7 @@ class Deployer
 
     /**
      * @param \FlameCore\Seabreeze\Manifest\Environment $environment
+     * @param bool $preserve
      */
     public function deploy(Environment $environment, $preserve = true)
     {
@@ -85,19 +86,6 @@ class Deployer
 
     /**
      * @param string $name
-     * @return \FlameCore\Synchronizer\SynchronizerFactoryInterface
-     */
-    public function getFactory($name)
-    {
-        if (!isset($this->engines[$name])) {
-            throw new \DomainException(sprintf('The engine "%s" does not exist.', $name));
-        }
-
-        return $this->engines[$name];
-    }
-
-    /**
-     * @param string $name
      * @return bool
      */
     public function supports($name)
@@ -120,5 +108,18 @@ class Deployer
     public function observe(ObserverInterface $observer)
     {
         $this->observer = $observer;
+    }
+
+    /**
+     * @param string $name
+     * @return \FlameCore\Synchronizer\SynchronizerFactoryInterface
+     */
+    protected function getFactory($name)
+    {
+        if (!isset($this->engines[$name])) {
+            throw new \DomainException(sprintf('The engine "%s" does not exist.', $name));
+        }
+
+        return $this->engines[$name];
     }
 }
