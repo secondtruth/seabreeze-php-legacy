@@ -33,11 +33,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ConsoleMessageResponder extends AbstractConsoleResponder
 {
     /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @var array
      */
-    public function __construct(OutputInterface $output)
+    protected $options;
+
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param array $options
+     */
+    public function __construct(OutputInterface $output, array $options = [])
     {
         parent::__construct($output);
+
+        $this->options = $options;
 
         $this->setListener('*.notice',  [$this, 'onNotice']);
         $this->setListener('*.warning', [$this, 'onWarning']);
@@ -53,7 +61,10 @@ class ConsoleMessageResponder extends AbstractConsoleResponder
             return;
         }
 
-        $this->output->writeln($data['message']);
+        $format = isset($this->options['notice.format']) ? $this->options['notice.format'] : '%message%';
+        $string = $this->format($data['message'], $format);
+
+        $this->output->writeln($string);
     }
 
     /**
@@ -65,7 +76,10 @@ class ConsoleMessageResponder extends AbstractConsoleResponder
             return;
         }
 
-        $this->output->writeln(sprintf('<comment>%s</comment>', $data['message']));
+        $format = isset($this->options['notice.format']) ? $this->options['notice.format'] : '<comment>%message%</comment>';
+        $string = $this->format($data['message'], $format);
+
+        $this->output->writeln($string);
     }
 
     /**
@@ -77,6 +91,21 @@ class ConsoleMessageResponder extends AbstractConsoleResponder
             return;
         }
 
-        $this->output->writeln(sprintf('<error>%s</error>', $data['message']));
+        $format = isset($this->options['notice.format']) ? $this->options['notice.format'] : '<error>%message%</error>';
+        $string = $this->format($data['message'], $format);
+
+        $this->output->writeln($string);
+    }
+
+    /**
+     * @param string $message
+     * @param string $format
+     * @return string
+     */
+    protected function format($message, $format)
+    {
+        return strtr($format, [
+            '%message%' => $message
+        ]);
     }
 }

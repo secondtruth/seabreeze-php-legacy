@@ -41,7 +41,7 @@ class ConsoleProvider extends Provider
      */
     public function __construct(OutputInterface $output, array $options = [])
     {
-        $responder = new ConsoleMessageResponder($output);
+        $responder = new ConsoleMessageResponder($output, isset($options['message']) ? $options['message'] : []);
         $this->setResponder('message', $responder);
 
         $responder = new ConsoleProgressResponder($output, isset($options['progress']) ? $options['progress'] : []);
