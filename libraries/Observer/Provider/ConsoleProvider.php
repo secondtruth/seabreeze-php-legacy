@@ -24,6 +24,7 @@
 namespace FlameCore\Seabreeze\Observer\Provider;
 
 use FlameCore\Seabreeze\Observer\Responder\Console\ConsoleMessageResponder;
+use FlameCore\Seabreeze\Observer\Responder\Console\ConsoleProcessResponder;
 use FlameCore\Seabreeze\Observer\Responder\Console\ConsoleProgressResponder;
 use FlameCore\Observer\Provider\Provider;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -43,6 +44,9 @@ class ConsoleProvider extends Provider
     {
         $responder = new ConsoleMessageResponder($output, isset($options['message']) ? $options['message'] : []);
         $this->setResponder('message', $responder);
+
+        $responder = new ConsoleProcessResponder($output, isset($options['process']) ? $options['process'] : []);
+        $this->setResponder('process', $responder);
 
         $responder = new ConsoleProgressResponder($output, isset($options['progress']) ? $options['progress'] : []);
         $this->setResponder('progress', $responder);

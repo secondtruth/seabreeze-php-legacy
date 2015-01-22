@@ -38,9 +38,13 @@ class DeploymentObserver extends Observer
      */
     public function __construct(ProviderInterface $provider)
     {
-        $responder = $provider->getResponder('progress');
+        $responder = $provider->getResponder('process');
         $this->addResponder('backup', $responder, ['action' => 'Backing up']);
         $this->addResponder('sync', $responder, ['action' => 'Synchronizing']);
+
+        $responder = $provider->getResponder('progress');
+        $this->addResponder('backup', $responder);
+        $this->addResponder('sync', $responder);
 
         $responder = $provider->getResponder('message');
         $this->addResponder('deploy', $responder);
