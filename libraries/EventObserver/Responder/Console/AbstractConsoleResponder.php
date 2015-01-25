@@ -21,34 +21,36 @@
  * @license  ISC License <http://opensource.org/licenses/ISC>
  */
 
-namespace FlameCore\Seabreeze\Observer\Provider;
+namespace FlameCore\Seabreeze\EventObserver\Responder\Console;
 
-use FlameCore\Seabreeze\Observer\Responder\Console\ConsoleMessageResponder;
-use FlameCore\Seabreeze\Observer\Responder\Console\ConsoleProcessResponder;
-use FlameCore\Seabreeze\Observer\Responder\Console\ConsoleProgressResponder;
-use FlameCore\Observer\Provider\Provider;
+use FlameCore\EventObserver\Responder\Responder;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * The ConsoleProvider class
+ * This abstract Responder allows interaction with the Symfony Console
  *
  * @author   Christian Neff <christian.neff@gmail.com>
  */
-class ConsoleProvider extends Provider
+abstract class AbstractConsoleResponder extends Responder
 {
     /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param array $options
+     * @var \Symfony\Component\Console\Output\OutputInterface
      */
-    public function __construct(OutputInterface $output, array $options = [])
+    protected $output;
+
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    public function __construct(OutputInterface $output)
     {
-        $responder = new ConsoleMessageResponder($output, isset($options['message']) ? $options['message'] : []);
-        $this->setResponder('message', $responder);
+        $this->output = $output;
+    }
 
-        $responder = new ConsoleProcessResponder($output, isset($options['process']) ? $options['process'] : []);
-        $this->setResponder('process', $responder);
-
-        $responder = new ConsoleProgressResponder($output, isset($options['progress']) ? $options['progress'] : []);
-        $this->setResponder('progress', $responder);
+    /**
+     * @return \Symfony\Component\Console\Output\OutputInterface
+     */
+    public function getOutput()
+    {
+        return $this->output;
     }
 }

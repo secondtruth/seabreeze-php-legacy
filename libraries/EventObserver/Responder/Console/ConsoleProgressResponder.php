@@ -21,21 +21,27 @@
  * @license  ISC License <http://opensource.org/licenses/ISC>
  */
 
-namespace FlameCore\Seabreeze\Observer\Responder\Console;
+namespace FlameCore\Seabreeze\EventObserver\Responder\Console;
 
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 /**
- * This Responder writes messages to the Console on process start/finish
+ * This Responder writes a Progress Bar to the Console
  *
  * @author   Christian Neff <christian.neff@gmail.com>
  */
-class ConsoleProcessResponder extends AbstractConsoleResponder
+class ConsoleProgressResponder extends AbstractConsoleResponder
 {
     /**
      * @var array
      */
     protected $options;
+
+    /**
+     * @var \Symfony\Component\Console\Helper\ProgressBar
+     */
+    protected $progress;
 
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
@@ -47,8 +53,9 @@ class ConsoleProcessResponder extends AbstractConsoleResponder
 
         $this->options = $options;
 
-        $this->setListener('*.start',  [$this, 'onStart']);
-        $this->setListener('*.finish', [$this, 'onFinish']);
+        $this->setListener('*.task.start',  [$this, 'onStart']);
+        $this->setListener('*.task.status', [$this, 'onStatus']);
+        $this->setListener('*.task.finish', [$this, 'onFinish']);
     }
 
     /**
@@ -56,39 +63,48 @@ class ConsoleProcessResponder extends AbstractConsoleResponder
      */
     protected function onStart(array $data)
     {
-        $message = isset($this->options['start.message']) ? $this->options['start.message'] : false;
+        $format = isset($this->options['format']) ? $this->options['format'] : 'normal';
 
-        if ($message) {
-            $string = $this->interpolate($message, $data);
-            $this->output->writeln($string);
+        if (isset($data['total']) && $data['total'] > 0) {
+            $maxSteps = (int) $data['total'];
+            unset($data['total']);
+        } else {
+            $maxSteps = 1;
         }
+
+        $progress = new ProgressBar($this->output, $maxSteps);
+        $progress->setFormat($format);
+        $progress->setEmptyBarCharacter(' ');
+        $progress->setProgressCharacter(':');
+
+        foreach ($data as $key => $value) {
+            $progress->setMessage($value, $key);
+        }
+
+        $progress->start();
+
+        $this->progress = $progress;
     }
 
     /**
      * @param array $data
      */
-    protected function onFinish(array $data)
+    protected function onStatus(array $data)
     {
-        $message = isset($this->options['finish.message']) ? $this->options['finish.message'] : false;
-
-        if ($message) {
-            $string = $this->interpolate($message, $data);
-            $this->output->writeln($string);
+        if (isset($data['current'])) {
+            $this->progress->setCurrent((int) $data['current']);
+        } else {
+            $this->progress->advance();
         }
     }
 
     /**
-     * @param string $message
-     * @param array $context
-     * @return string
+     * @return void
      */
-    protected function interpolate($message, array $context = [])
+    protected function onFinish()
     {
-        $replace = array();
-        foreach ($context as $key => $value) {
-            $replace['%'.$key.'%'] = $value;
-        }
+        $this->progress->finish();
 
-        return strtr($message, $replace);
+        $this->output->write(PHP_EOL);
     }
 }

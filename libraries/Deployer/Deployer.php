@@ -25,7 +25,7 @@ namespace FlameCore\Seabreeze\Deployer;
 
 use FlameCore\Seabreeze\Manifest\Environment;
 use FlameCore\Synchronizer\SynchronizerFactoryInterface;
-use FlameCore\Observer\ObserverInterface;
+use FlameCore\EventObserver\ObserverInterface;
 
 /**
  * The Deployer class
@@ -40,7 +40,7 @@ class Deployer
     protected $engines = array();
 
     /**
-     * @var \FlameCore\Observer\ObserverInterface
+     * @var \FlameCore\EventObserver\ObserverInterface
      */
     protected $observer;
 
@@ -115,7 +115,7 @@ class Deployer
     }
 
     /**
-     * @param \FlameCore\Observer\ObserverInterface $observer
+     * @param \FlameCore\EventObserver\ObserverInterface $observer
      */
     public function observe(ObserverInterface $observer)
     {

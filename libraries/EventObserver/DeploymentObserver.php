@@ -21,36 +21,32 @@
  * @license  ISC License <http://opensource.org/licenses/ISC>
  */
 
-namespace FlameCore\Seabreeze\Observer\Responder\Console;
+namespace FlameCore\Seabreeze\EventObserver;
 
-use FlameCore\Observer\Responder\Responder;
-use Symfony\Component\Console\Output\OutputInterface;
+use FlameCore\EventObserver\Observer;
+use FlameCore\EventObserver\Provider\ProviderInterface;
 
 /**
- * This abstract Responder allows interaction with the Symfony Console
+ * The DeploymentObserver class
  *
  * @author   Christian Neff <christian.neff@gmail.com>
  */
-abstract class AbstractConsoleResponder extends Responder
+class DeploymentObserver extends Observer
 {
     /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
+     * @param \FlameCore\EventObserver\Provider\ProviderInterface $provider
      */
-    protected $output;
-
-    /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     */
-    public function __construct(OutputInterface $output)
+    public function __construct(ProviderInterface $provider)
     {
-        $this->output = $output;
-    }
+        $responder = $provider->getResponder('process');
+        $this->addResponder('backup', $responder, ['action' => 'Backing up']);
+        $this->addResponder('sync', $responder, ['action' => 'Synchronizing']);
 
-    /**
-     * @return \Symfony\Component\Console\Output\OutputInterface
-     */
-    public function getOutput()
-    {
-        return $this->output;
+        $responder = $provider->getResponder('progress');
+        $this->addResponder('backup', $responder);
+        $this->addResponder('sync', $responder);
+
+        $responder = $provider->getResponder('message');
+        $this->addResponder('deploy', $responder);
     }
 }

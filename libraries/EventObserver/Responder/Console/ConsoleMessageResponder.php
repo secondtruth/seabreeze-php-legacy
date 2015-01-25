@@ -21,7 +21,7 @@
  * @license  ISC License <http://opensource.org/licenses/ISC>
  */
 
-namespace FlameCore\Seabreeze\Observer\Responder\Console;
+namespace FlameCore\Seabreeze\EventObserver\Responder\Console;
 
 use Symfony\Component\Console\Output\OutputInterface;
 
