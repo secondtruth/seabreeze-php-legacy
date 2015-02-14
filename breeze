@@ -1,0 +1,57 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Breeze Deployment
+ * Copyright (C) 2014 IceFlame.net
+ *
+ * Permission to use, copy, modify, and/or distribute this software for
+ * any purpose with or without fee is hereby granted, provided that the
+ * above copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE
+ * FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY
+ * DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER
+ * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+ * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ *
+ * @package  FlameCore\Seabreeze
+ * @version  0.1-dev
+ * @link     http://www.flamecore.org
+ * @license  ISC License <http://opensource.org/licenses/ISC>
+ */
+
+namespace FlameCore\Seabreeze;
+
+use FlameCore\Seabreeze\Console\Application;
+
+/**
+ * Breeze Core
+ *
+ * @author   Christian Neff <christian.neff@gmail.com>
+ */
+
+set_time_limit(0);
+
+define('DS', DIRECTORY_SEPARATOR);
+define('BREEZE_PATH', DS != '/' ? str_replace(DS, '/', __DIR__) : __DIR__);
+
+if (!is_readable(BREEZE_PATH.'/vendor/autoload.php')) {
+    exit('No vendor autoloader found. Please make sure that you have installed the required libraries using Composer.');
+}
+
+require_once BREEZE_PATH.'/includes/autoload.php';
+require_once BREEZE_PATH.'/vendor/autoload.php';
+
+$loader = new ClassLoader(__NAMESPACE__, BREEZE_PATH);
+$loader->register();
+
+$workingDir = getcwd();
+
+try {
+    $application = new Application($workingDir);
+    $application->run();
+} catch (\Exception $e) {
+    exit(1);
+}
