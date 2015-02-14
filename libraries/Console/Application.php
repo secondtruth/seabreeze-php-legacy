@@ -93,6 +93,7 @@ class Application extends BaseApplication
         $commands = parent::getDefaultCommands();
         $commands[] = new Command\InitializeCommand();
         $commands[] = new Command\InfoCommand();
+        $commands[] = new Command\DeployCommand();
 
         return $commands;
     }
