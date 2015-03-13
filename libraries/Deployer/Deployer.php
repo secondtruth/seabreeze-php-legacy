@@ -60,20 +60,20 @@ class Deployer
             $this->observer->notify('deploy.start');
         }
 
-        foreach ($environment->getSynchronizers() as $settings) {
-            $mode = $settings->getMode();
+        foreach ($environment->getSyncJobs() as $job) {
+            $mode = $job->getMode();
 
             if (!$this->supports($mode)) {
                 continue;
             }
 
             $factory = $this->getFactory($mode);
-            $sourceSettings = $settings->getSource();
+            $sourceSettings = $job->getSource();
 
-            foreach ($settings->getTargets() as $targetSettings) {
+            foreach ($job->getTargets() as $targetSettings) {
                 $synchronizer = $factory->create($sourceSettings, $targetSettings);
 
-                $excludes = $settings->getExcludes();
+                $excludes = $job->getExcludes();
                 $synchronizer->setExcludes($excludes);
 
                 if ($this->observer) {

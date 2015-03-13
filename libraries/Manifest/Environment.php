@@ -36,9 +36,9 @@ class Environment implements ManifestInterface
     protected $name;
 
     /**
-     * @var \FlameCore\Seabreeze\Manifest\SynchronizerSettings[]
+     * @var \FlameCore\Seabreeze\Manifest\SynchronizerJob[]
      */
-    protected $synchronizers = array();
+    protected $syncJobs = array();
 
     /**
      * @var array
@@ -77,7 +77,7 @@ class Environment implements ManifestInterface
             $synchronizers = $configuration['synchronizers'];
             foreach ($synchronizers as $mode => $settings) {
                 $mode = strtolower($mode);
-                $this->synchronizers[$mode] = new SynchronizerSettings($mode, (array) $settings, $this);
+                $this->syncJobs[$mode] = new SynchronizerJob($mode, (array) $settings, $this);
             }
         }
 
@@ -96,7 +96,7 @@ class Environment implements ManifestInterface
     {
         $data = array();
 
-        foreach ($this->synchronizers as $type => $settings) {
+        foreach ($this->syncJobs as $type => $settings) {
             $data['synchronizers'][$type] = $settings->export();
         }
 
@@ -136,26 +136,26 @@ class Environment implements ManifestInterface
      * @param string $name
      * @return bool
      */
-    public function hasSynchronizer($name)
+    public function hasSyncJob($name)
     {
-        return isset($this->synchronizers[$name]);
+        return isset($this->syncJobs[$name]);
     }
 
     /**
-     * @return \FlameCore\Seabreeze\Manifest\SynchronizerSettings[]
+     * @return \FlameCore\Seabreeze\Manifest\SynchronizerJob[]
      */
-    public function getSynchronizers()
+    public function getSyncJobs()
     {
-        return $this->synchronizers;
+        return $this->syncJobs;
     }
 
     /**
      * @param string $name
-     * @return \FlameCore\Seabreeze\Manifest\SynchronizerSettings
+     * @return \FlameCore\Seabreeze\Manifest\SynchronizerJob
      */
-    public function getSynchronizer($name)
+    public function getSyncJob($name)
     {
-        return isset($this->synchronizers[$name]) ? $this->synchronizers[$name] : null;
+        return isset($this->syncJobs[$name]) ? $this->syncJobs[$name] : null;
     }
 
     /**

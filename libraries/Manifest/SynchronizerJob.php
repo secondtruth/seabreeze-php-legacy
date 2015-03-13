@@ -28,7 +28,7 @@ namespace FlameCore\Seabreeze\Manifest;
  *
  * @author   Christian Neff <christian.neff@gmail.com>
  */
-class SynchronizerSettings
+class SynchronizerJob
 {
     /**
      * @var string
