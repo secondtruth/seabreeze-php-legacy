@@ -76,7 +76,7 @@ class ConsoleMessageResponder extends AbstractConsoleResponder
             return;
         }
 
-        $format = isset($this->options['notice.format']) ? $this->options['notice.format'] : '<comment>%message%</comment>';
+        $format = isset($this->options['warning.format']) ? $this->options['warning.format'] : '<comment>%message%</comment>';
         $string = $this->format($data['message'], $format);
 
         $this->output->writeln($string);
@@ -91,7 +91,7 @@ class ConsoleMessageResponder extends AbstractConsoleResponder
             return;
         }
 
-        $format = isset($this->options['notice.format']) ? $this->options['notice.format'] : '<error>%message%</error>';
+        $format = isset($this->options['error.format']) ? $this->options['error.format'] : '<error>%message%</error>';
         $string = $this->format($data['message'], $format);
 
         $this->output->writeln($string);
