@@ -46,6 +46,11 @@ class Environment implements ManifestInterface
     protected $tasks = array();
 
     /**
+     * @var array
+     */
+    protected $tests = array();
+
+    /**
      * @var \FlameCore\Seabreeze\Manifest\Project
      */
     protected $project;
@@ -87,6 +92,10 @@ class Environment implements ManifestInterface
                 $this->tasks[strtolower($type)] = (array) $execute;
             }
         }
+
+        if (isset($configuration['tests'])) {
+            $this->tests = (array) $configuration['tests'];
+        }
     }
 
     /**
@@ -103,6 +112,8 @@ class Environment implements ManifestInterface
         foreach ($this->tasks as $type => $executes) {
             $data['tasks'][$type] = $executes;
         }
+
+        $data['tests'] = $this->tests;
 
         return $data;
     }
@@ -182,6 +193,22 @@ class Environment implements ManifestInterface
     public function getTask($name)
     {
         return isset($this->tasks[$name]) ? $this->tasks[$name] : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTests()
+    {
+        return !empty($this->tests);
+    }
+
+    /**
+     * @return array
+     */
+    public function getTests()
+    {
+        return $this->tests;
     }
 
     /**
