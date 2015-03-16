@@ -24,6 +24,7 @@
 namespace FlameCore\Seabreeze\Runner;
 
 use FlameCore\EventObserver\ObserverInterface;
+use Symfony\Component\Process\Process;
 
 /**
  * The abstract Runner class
@@ -95,5 +96,29 @@ abstract class AbstractRunner implements RunnerInterface
     public function getFailed()
     {
         return $this->failed;
+    }
+
+    /**
+     * @param string $command
+     * @return array
+     */
+    protected function execucte($command)
+    {
+        $command = (string) $command;
+
+        $process = new Process($command);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            $this->failed++;
+            $this->success = false;
+        } else {
+            $this->succeeded++;
+        }
+
+        return array(
+            'success' => $process->isSuccessful(),
+            'output' => $process->getOutput()
+        );
     }
 }
