@@ -93,8 +93,13 @@ class ConsoleProgressResponder extends AbstractConsoleResponder
     {
         if (isset($data['current'])) {
             $this->progress->setCurrent((int) $data['current']);
+            unset($data['current']);
         } else {
             $this->progress->advance();
+        }
+
+        foreach ($data as $key => $value) {
+            $this->progress->setMessage($value, $key);
         }
     }
 

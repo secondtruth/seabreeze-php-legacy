@@ -86,9 +86,19 @@ class ConsoleProcessResponder extends AbstractConsoleResponder
     {
         $replace = array();
         foreach ($context as $key => $value) {
-            $replace['%'.$key.'%'] = $value;
+            $replace['%'.$key.'%'] = $this->transform($value, $key);
         }
 
         return strtr($message, $replace);
+    }
+
+    /**
+     * @param string $value
+     * @param string $key
+     * @return bool
+     */
+    protected function transform($value, $key)
+    {
+        return isset($this->options['transform.'.$key][$value]) ? $this->options['transform.'.$key][$value] : $value;
     }
 }

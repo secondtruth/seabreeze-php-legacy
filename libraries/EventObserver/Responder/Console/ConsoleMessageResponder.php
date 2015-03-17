@@ -61,9 +61,7 @@ class ConsoleMessageResponder extends AbstractConsoleResponder
             return;
         }
 
-        $format = isset($this->options['notice.format']) ? $this->options['notice.format'] : '%message%';
-        $string = $this->format($data['message'], $format);
-
+        $string = $this->format($data['message'], 'notice', '%message%');
         $this->output->writeln($string);
     }
 
@@ -76,9 +74,7 @@ class ConsoleMessageResponder extends AbstractConsoleResponder
             return;
         }
 
-        $format = isset($this->options['warning.format']) ? $this->options['warning.format'] : '<comment>%message%</comment>';
-        $string = $this->format($data['message'], $format);
-
+        $string = $this->format($data['message'], 'warning', '<comment>%message%</comment>');
         $this->output->writeln($string);
     }
 
@@ -91,19 +87,20 @@ class ConsoleMessageResponder extends AbstractConsoleResponder
             return;
         }
 
-        $format = isset($this->options['error.format']) ? $this->options['error.format'] : '<error>%message%</error>';
-        $string = $this->format($data['message'], $format);
-
+        $string = $this->format($data['message'], 'error', '<error>%message%</error>');
         $this->output->writeln($string);
     }
 
     /**
      * @param string $message
-     * @param string $format
+     * @param string $type
+     * @param string $default
      * @return string
      */
-    protected function format($message, $format)
+    protected function format($message, $type, $default)
     {
+        $format = isset($this->options[$type.'.format']) ? $this->options[$type.'.format'] : $default;
+
         return strtr($format, [
             '%message%' => $message
         ]);
