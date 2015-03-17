@@ -170,6 +170,14 @@ class Environment implements ManifestInterface
     }
 
     /**
+     * @param \FlameCore\Seabreeze\Manifest\SynchronizerJob $job
+     */
+    public function addSyncJob(SynchronizerJob $job)
+    {
+        $this->syncJobs[] = $job;
+    }
+
+    /**
      * @param string $name
      * @return bool
      */
@@ -196,6 +204,19 @@ class Environment implements ManifestInterface
     }
 
     /**
+     * @param string $type
+     * @param string $execute
+     */
+    public function addTasks($type, $execute)
+    {
+        if (!in_array($type, ['pre_deploy', 'post_deploy'])) {
+            throw new \LogicException(sprintf('Task type "%s" is invalid. Use one of: pre_deploy, post_deploy.', $type));
+        }
+
+        $this->tasks[$type][] = (string) $execute;
+    }
+
+    /**
      * @return bool
      */
     public function hasTests()
@@ -209,6 +230,21 @@ class Environment implements ManifestInterface
     public function getTests()
     {
         return $this->tests;
+    }
+
+    /**
+     * @param string $name
+     * @param string $command
+     */
+    public function addTest($name, $command)
+    {
+        $name = (string) $name;
+
+        if (isset($this->tests[$name])) {
+            throw new \LogicException(sprintf('A test with name "%s" already exists.', $name));
+        }
+
+        $this->tests[$name] = (string) $command;
     }
 
     /**
