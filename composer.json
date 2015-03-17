@@ -1,7 +1,7 @@
 {
     "name": "flamecore/seabreeze",
     "description": "Deployment tool for database-driven PHP applications",
-    "type": "project",
+    "type": "library",
     "homepage": "http://www.flamecore.org",
     "keywords": ["deployment"],
     "license": "ISC",
@@ -26,5 +26,8 @@
         "symfony/console": "~2.5",
         "symfony/process": "~2.5"
     },
-    "bin": ["seabreeze"]
+    "bin": ["breeze"],
+    "config": {
+        "bin-dir": "bin"
+    }
 }
