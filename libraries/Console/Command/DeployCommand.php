@@ -74,8 +74,9 @@ class DeployCommand extends Command
         $success = $deployer->deploy($environment);
 
         $output->writeln(sprintf('Deployment process finished %s.', !$success ? 'with errors' : 'successfully'));
-
         $output->writeln('Done.');
+
+        return $success ? 0 : 1;
     }
     
     protected function initObserver(InputInterface $input, OutputInterface $output)
