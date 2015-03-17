@@ -30,7 +30,7 @@ use FlameCore\EventObserver\ObserverInterface;
  *
  * @author   Christian Neff <christian.neff@gmail.com>
  */
-class AbstractRunner
+abstract class AbstractRunner implements RunnerInterface
 {
     /**
      * @var \FlameCore\EventObserver\ObserverInterface

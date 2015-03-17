@@ -45,7 +45,7 @@ class Project implements ManifestInterface
     /**
      * @var \FlameCore\Seabreeze\Manifest\Environment[]
      */
-    protected $environments;
+    protected $environments = array();
 
     /**
      * @param string $directory
