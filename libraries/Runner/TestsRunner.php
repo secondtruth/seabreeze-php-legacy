@@ -35,20 +35,30 @@ class TestsRunner extends AbstractRunner
     /**
      * {@inheritdoc}
      */
-    public function run(Environment $environment)
+    protected function doRun(Environment $environment)
     {
+        $tests = $environment->getTests();
+
         if ($this->observer) {
-            $this->observer->notify('tests.start');
+            $this->observer->notify('tests.start', ['total' => count($tests)]);
         }
 
-        foreach ($environment->getTests() as $name => $command) {
-            $this->results[$name] = $this->execucte($command);
+        foreach ($tests as $name => $command) {
+            if ($this->observer) {
+                $this->observer->notify('test.start', ['test' => $name]);
+            }
+
+            $results = $this->execucte($command);
+
+            if ($this->observer) {
+                $this->observer->notify('test.finish', $results);
+            }
+
+            $this->results[$name] = $results;
         }
 
         if ($this->observer) {
             $this->observer->notify('tests.finish');
         }
-
-        return $this->success;
     }
 }

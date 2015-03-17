@@ -24,6 +24,7 @@
 namespace FlameCore\Seabreeze\Runner;
 
 use FlameCore\EventObserver\ObserverInterface;
+use FlameCore\Seabreeze\Manifest\Environment;
 use Symfony\Component\Process\Process;
 
 /**
@@ -57,6 +58,16 @@ abstract class AbstractRunner implements RunnerInterface
      * @var array
      */
     protected $results = array();
+
+    /**
+     * {@inheritdoc}
+     */
+    public function run(Environment $environment)
+    {
+        $this->doRun($environment);
+
+        return $this->success;
+    }
 
     /**
      * {@inheritdoc}
@@ -97,6 +108,11 @@ abstract class AbstractRunner implements RunnerInterface
     {
         return $this->failed;
     }
+
+    /**
+     * @param \FlameCore\Seabreeze\Manifest\Environment $environment
+     */
+    abstract protected function doRun(Environment $environment);
 
     /**
      * @param string $command
