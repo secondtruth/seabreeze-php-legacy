@@ -94,6 +94,7 @@ class Application extends BaseApplication
         $commands[] = new Command\InitializeCommand();
         $commands[] = new Command\InfoCommand();
         $commands[] = new Command\DeployCommand();
+        $commands[] = new Command\TestCommand();
 
         return $commands;
     }
