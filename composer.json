@@ -26,6 +26,11 @@
         "symfony/console": "~2.5",
         "symfony/process": "~2.5"
     },
+    "autoload": {
+        "psr-4": {
+            "FlameCore\\Seabreeze\\": "libraries/"
+        }
+    },
     "bin": ["breeze"],
     "config": {
         "bin-dir": "bin"
