@@ -65,12 +65,8 @@ class DeployCommand extends Command
         $output->writeln('Starting deployment process.');
 
         $environment = $project->getEnvironment($name);
-        $observer = $this->initObserver($input, $output);
 
-        $deployer = new Deployer();
-        $deployer->register('files', new FilesSynchronizerFactory());
-        $deployer->observe($observer);
-
+        $deployer = $this->initDeployer($input, $output);
         $success = $deployer->deploy($environment);
 
         $output->writeln(sprintf('Deployment process finished %s.', !$success ? 'with errors' : 'successfully'));
@@ -78,7 +74,23 @@ class DeployCommand extends Command
 
         return $success ? 0 : 1;
     }
-    
+
+    protected function initDeployer(InputInterface $input, OutputInterface $output)
+    {
+        $observer = $this->initObserver($input, $output);
+
+        $deployer = new Deployer();
+        $deployer->observe($observer);
+
+        $factory = new FilesSynchronizerFactory();
+        $factory->registerSource('local', 'FlameCore\Synchronizer\Files\Source\LocalFilesSource');
+        $factory->registerTarget('local', 'FlameCore\Synchronizer\Files\Target\LocalFilesTarget');
+
+        $deployer->register('files', $factory);
+
+        return $deployer;
+    }
+
     protected function initObserver(InputInterface $input, OutputInterface $output)
     {
         $format = '- %task%... %percent:3s%%';
