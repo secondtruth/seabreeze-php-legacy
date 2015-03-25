@@ -232,12 +232,12 @@ class Project implements ManifestInterface
             throw new \DomainException(sprintf('Directory "%s" does not exist.', $directory));
         }
 
-        $manifestDir = $directory . DIRECTORY_SEPARATOR . '.seabreeze';
+        $manifestDir = $directory.DIRECTORY_SEPARATOR.'.seabreeze';
 
         if (!is_dir($manifestDir)) {
             throw new \LogicException(sprintf('Directory "%s" contains no manifest.', $directory));
         }
 
-        return realpath($manifestDir . DIRECTORY_SEPARATOR . $manifest);
+        return $manifestDir.DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $manifest);
     }
 }
