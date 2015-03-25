@@ -2,7 +2,7 @@ Seabreeze
 =========
 
 [![Code Climate](http://img.shields.io/codeclimate/github/FlameCore/Seabreeze.svg)](https://codeclimate.com/github/FlameCore/Seabreeze)
-[![License](http://img.shields.io/packagist/l/flamecore/seabreeze.svg)](https://packagist.org/packages/flamecore/seabreeze)
+[![License](http://img.shields.io/packagist/l/flamecore/seabreeze.svg)](http://www.flamecore.org/projects/seabreeze)
 
 Seabreeze is a deployment and testing tool for database-driven web applications. It aims to be very flexible and extensible.
 
@@ -19,12 +19,6 @@ Features
 * Run all your tests with one simple command
 
 * Fast and easy to use
-
-
-Requirements
-------------
-
-* You must have at least PHP version 5.4 installed on your system.
 
 
 Usage
@@ -71,6 +65,12 @@ use FlameCore\Seabreeze\Manifest\Project;
 
 require 'vendor/autoload.php';
 ```
+
+
+Requirements
+------------
+
+* You must have at least PHP version 5.4 installed on your system.
 
 
 Contributors
