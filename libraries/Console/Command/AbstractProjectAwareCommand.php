@@ -24,44 +24,24 @@
 namespace FlameCore\Seabreeze\Console\Command;
 
 use FlameCore\Seabreeze\Manifest\Project;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Command\Command;
 
 /**
- * The "info" Console Command
+ * The AbstractProjectAwareCommand class
  *
  * @author   Christian Neff <christian.neff@gmail.com>
  */
-class InfoCommand extends AbstractProjectAwareCommand
+abstract class AbstractProjectAwareCommand extends Command
 {
-    protected function configure()
+    protected function getProject()
     {
-        $this->setName('info')
-             ->setDescription('Displays project information');
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $project = $this->getProject();
-
-        $output->writeln('<comment>Project Details:</comment>');
-
-        $details = $this->getDetails($project);
-        foreach ($details as $name => $value) {
-            $output->writeln(sprintf(' %-10s %s', $name.':', $value));
+        try {
+            $directory = $this->getApplication()->getWorkingDir();
+            $project = Project::fromDirectory($directory);
+        } catch (\Exception $e) {
+            throw new \DomainException('Missing or unreadable manifest file in working directory');
         }
 
-        $output->writeln(PHP_EOL.'<comment>Environments:</comment>');
-
-        foreach ($project->getEnvironments() as $environment) {
-            $output->writeln(sprintf(" - %s", $environment->getName()));
-        }
-    }
-
-    protected function getDetails(Project $project)
-    {
-        return array(
-            'Name' => $project->getName()
-        );
+        return $project;
     }
 }

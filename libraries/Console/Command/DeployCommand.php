@@ -23,12 +23,10 @@
 
 namespace FlameCore\Seabreeze\Console\Command;
 
-use FlameCore\Seabreeze\Manifest\Project;
 use FlameCore\Seabreeze\Deployer\Deployer;
 use FlameCore\Seabreeze\EventObserver\DeploymentObserver;
 use FlameCore\Seabreeze\EventObserver\Provider\ConsoleProvider;
 use FlameCore\Synchronizer\Files\FilesSynchronizerFactory;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,7 +36,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author   Christian Neff <christian.neff@gmail.com>
  */
-class DeployCommand extends Command
+class DeployCommand extends AbstractProjectAwareCommand
 {
     protected function configure()
     {
@@ -49,12 +47,7 @@ class DeployCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        try {
-            $directory = $this->getApplication()->getWorkingDir();
-            $project = Project::fromDirectory($directory);
-        } catch (\Exception $e) {
-            throw new \DomainException('Missing or unreadable manifest file in working directory');
-        }
+        $project = $this->getProject();
 
         $name = $input->getArgument('environment');
 
