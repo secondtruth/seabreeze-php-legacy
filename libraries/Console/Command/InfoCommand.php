@@ -51,19 +51,23 @@ class InfoCommand extends Command
         }
 
         $output->writeln('<comment>Project Details:</comment>');
-        
-        $details = array(
-            'Name:' => $project->getName()
-        );
 
+        $details = $this->getDetails($project);
         foreach ($details as $name => $value) {
-            $output->writeln(sprintf(' %-10s %s', $name, $value));
+            $output->writeln(sprintf(' %-10s %s', $name.':', $value));
         }
-        
+
         $output->writeln(PHP_EOL.'<comment>Environments:</comment>');
 
         foreach ($project->getEnvironments() as $environment) {
             $output->writeln(sprintf(" - %s", $environment->getName()));
         }
+    }
+
+    protected function getDetails(Project $project)
+    {
+        return array(
+            'Name' => $project->getName()
+        );
     }
 }
