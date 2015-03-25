@@ -76,8 +76,8 @@ class DeployCommand extends AbstractProjectAwareCommand
         $deployer->observe($observer);
 
         $factory = new FilesSynchronizerFactory();
-        $factory->registerSource('local', 'FlameCore\Synchronizer\Files\Source\LocalFilesSource');
-        $factory->registerTarget('local', 'FlameCore\Synchronizer\Files\Target\LocalFilesTarget');
+        $this->setupFilesSources($factory);
+        $this->setupFilesTargets($factory);
 
         $deployer->register('files', $factory);
 
@@ -103,5 +103,15 @@ class DeployCommand extends AbstractProjectAwareCommand
 
         $provider = new ConsoleProvider($output, $options);
         return new DeploymentObserver($provider);
+    }
+
+    protected function setupFilesSources(FilesSynchronizerFactory $factory)
+    {
+        $factory->registerSource('local', 'FlameCore\Synchronizer\Files\Source\LocalFilesSource');
+    }
+
+    protected function setupFilesTargets(FilesSynchronizerFactory $factory)
+    {
+        $factory->registerTarget('local', 'FlameCore\Synchronizer\Files\Target\LocalFilesTarget');
     }
 }
