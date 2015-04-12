@@ -27,8 +27,10 @@ use FlameCore\Seabreeze\Deployer\Deployer;
 use FlameCore\Seabreeze\EventObserver\DeploymentObserver;
 use FlameCore\Seabreeze\EventObserver\Provider\ConsoleProvider;
 use FlameCore\Synchronizer\Files\FilesSynchronizerFactory;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -42,7 +44,8 @@ class DeployCommand extends AbstractProjectAwareCommand
     {
         $this->setName('deploy')
              ->setDescription('Deploys to given environment')
-             ->addArgument('environment', InputArgument::REQUIRED, 'The environment to deploy to');
+             ->addArgument('environment', InputArgument::REQUIRED, 'The environment to deploy to')
+             ->addOption('test', 't', InputOption::VALUE_NONE, 'Run tests before deploying');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -55,15 +58,30 @@ class DeployCommand extends AbstractProjectAwareCommand
             throw new \DomainException(sprintf('Deployment environment "%s" does not exist', $name));
         }
 
-        $output->writeln('Starting deployment process.');
+        if ($input->getOption('test') && ($command = $this->getApplication()->find('test'))) {
+            $arguments = array(
+                'command' => 'test',
+                'environment' => $name
+            );
+
+            $input2 = new ArrayInput($arguments);
+            $status = $command->run($input2, $output);
+
+            if ($status != 0) {
+                $output->writeln('Deployment process aborted due to failed tests.');
+
+                return $status;
+            }
+        }
 
         $environment = $project->getEnvironment($name);
+
+        $output->writeln('Starting deployment process.');
 
         $deployer = $this->initDeployer($input, $output);
         $success = $deployer->deploy($environment);
 
         $output->writeln(sprintf('Deployment process finished %s.', !$success ? 'with errors' : 'successfully'));
-        $output->writeln('Done.');
 
         return $success ? 0 : 1;
     }
