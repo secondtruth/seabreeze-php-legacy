@@ -178,42 +178,58 @@ class Environment implements ManifestInterface
     }
 
     /**
-     * @param string $name
+     * @param string $type
      * @return bool
      */
-    public function hasTask($name)
+    public function hasTasks($type)
     {
-        return isset($this->tasks[$name]);
-    }
-
-    /**
-     * @return array
-     */
-    public function getTasks()
-    {
-        return $this->tasks;
-    }
-
-    /**
-     * @param string $name
-     * @return array
-     */
-    public function getTask($name)
-    {
-        return isset($this->tasks[$name]) ? $this->tasks[$name] : null;
+        return isset($this->tasks[$type]) ? !empty($this->tasks[$type]) : false;
     }
 
     /**
      * @param string $type
+     * @param string $name
+     * @return bool
+     */
+    public function hasTask($type, $name)
+    {
+        return isset($this->tasks[$type][$name]);
+    }
+
+    /**
+     * @param string $type
+     * @return array
+     */
+    public function getTasks($type)
+    {
+        return isset($this->tasks[$type]) ? $this->tasks[$type] : [];
+    }
+
+    /**
+     * @param string $type
+     * @param string $name
+     * @return array
+     */
+    public function getTask($type, $name)
+    {
+        return isset($this->tasks[$type][$name]) ? $this->tasks[$type][$name] : null;
+    }
+
+    /**
+     * @param string $type
+     * @param string $name
      * @param string $execute
      */
-    public function addTasks($type, $execute)
+    public function addTask($type, $name, $execute)
     {
+        $type = (string) $type;
+        $name = (string) $name;
+
         if (!in_array($type, ['pre_deploy', 'post_deploy'])) {
             throw new \LogicException(sprintf('Task type "%s" is invalid. Use one of: pre_deploy, post_deploy.', $type));
         }
 
-        $this->tasks[$type][] = (string) $execute;
+        $this->tasks[$type][$name] = (string) $execute;
     }
 
     /**
@@ -225,11 +241,29 @@ class Environment implements ManifestInterface
     }
 
     /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasTest($name)
+    {
+        return isset($this->tasks[$name]);
+    }
+
+    /**
      * @return array
      */
     public function getTests()
     {
         return $this->tests;
+    }
+
+    /**
+     * @param string $name
+     * @return array
+     */
+    public function getTest($name)
+    {
+        return isset($this->tests[$name]) ? $this->tests[$name] : null;
     }
 
     /**

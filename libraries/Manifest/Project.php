@@ -177,7 +177,7 @@ class Project implements ManifestInterface
             }
         }
 
-        $yaml = Yaml::dump($object->export(), 4);
+        $yaml = Yaml::dump($object->export(), 4, 2);
         file_put_contents($filename, $yaml);
     }
 
