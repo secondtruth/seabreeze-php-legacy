@@ -30,35 +30,53 @@ use FlameCore\Seabreeze\Manifest\Environment;
  *
  * @author   Christian Neff <christian.neff@gmail.com>
  */
-class TestsRunner extends AbstractRunner
+class TestsRunner extends CommandsRunner
 {
     /**
      * {@inheritdoc}
      */
-    protected function doRun(Environment $environment)
+    protected function getCommands(Environment $environment)
     {
-        $tests = $environment->getTests();
+        return $environment->getTests();
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function onRunnerStart($commands)
+    {
         if ($this->observer) {
-            $this->observer->notify('tests.start', ['total' => count($tests)]);
+            $this->observer->notify('tests.start', ['total' => count($commands)]);
         }
+    }
 
-        foreach ($tests as $name => $command) {
-            if ($this->observer) {
-                $this->observer->notify('test.start', ['test' => $name]);
-            }
-
-            $results = $this->execucte($command);
-
-            if ($this->observer) {
-                $this->observer->notify('test.finish', $results);
-            }
-
-            $this->results[$name] = $results;
-        }
-
+    /**
+     * {@inheritdoc}
+     */
+    protected function onRunnerFinish()
+    {
         if ($this->observer) {
-            $this->observer->notify('tests.finish');
+            $this->observer->notify('tests.finish', ['results' => $this->results]);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function onCommandStart($name)
+    {
+        if ($this->observer) {
+            $this->observer->notify('test.start', ['test' => $name]);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function onCommandFinish(array $result)
+    {
+        if ($this->observer) {
+            $this->observer->notify('test.finish', $result);
         }
     }
 }
