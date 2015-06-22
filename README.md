@@ -1,7 +1,9 @@
 Seabreeze
 =========
 
-[![Code Climate](http://img.shields.io/codeclimate/github/FlameCore/Seabreeze.svg)](https://codeclimate.com/github/FlameCore/Seabreeze)
+[![Build Status](https://img.shields.io/travis/FlameCore/Seabreeze.svg)](https://travis-ci.org/FlameCore/Seabreeze)
+[![Scrutinizer](http://img.shields.io/scrutinizer/g/FlameCore/Seabreeze.svg)](https://scrutinizer-ci.com/g/FlameCore/Seabreeze)
+[![Coverage](http://img.shields.io/codeclimate/coverage/github/FlameCore/Seabreeze.svg)](https://codeclimate.com/github/FlameCore/Seabreeze/coverage)
 [![License](http://img.shields.io/packagist/l/flamecore/seabreeze.svg)](http://www.flamecore.org/projects/seabreeze)
 
 Seabreeze is a deployment and testing tool for database-driven web applications. It aims to be very flexible and extensible.
@@ -18,6 +20,10 @@ Features
 
 * Run all your tests with one simple command
 
+* Compatibility with external deployment tools and task runners (planned)
+
+* A clear and feature-rich Web Interface (planned)
+
 * Fast and easy to use
 
 
@@ -26,11 +32,11 @@ Usage
 
 Invoke the program from your project directory:
 
-    vendor/bin/breeze COMMAND ...
+    $ vendor/bin/breeze COMMAND ...
 
 To see a list of available commands, use the `list` command:
 
-    vendor/bin/breeze list
+    $ vendor/bin/breeze list
 
 
 Installation
@@ -50,11 +56,11 @@ Create a file called `composer.json` in your project directory and put the follo
 
 [Install Composer](https://getcomposer.org/doc/00-intro.md#installation-nix) if you don't already have it present on your system:
 
-    curl -sS https://getcomposer.org/installer | php
+    $ curl -sS https://getcomposer.org/installer | php
 
 Use Composer to [download the vendor libraries](https://getcomposer.org/doc/00-intro.md#using-composer) and generate the vendor/autoload.php file:
 
-    php composer.phar install
+    $ php composer.phar install
 
 To make use of the API, include the vendor autoloader and use the classes:
 
