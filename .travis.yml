@@ -1,0 +1,30 @@
+language: php
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - hhvm
+
+matrix:
+  allow_failures:
+    - php: 7.0
+    - php: hhvm
+  fast_finish: true
+
+before_install:
+  - travis_retry composer self-update
+
+install:
+  - composer install --prefer-source
+
+script: phpunit --coverage-text --coverage-clover=coverage.clover
+
+after_script:
+  - php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover
+  - php vendor/bin/test-reporter --coverage-report=coverage.clover --stdout > codeclimate.json
+  - "curl -X POST -d @codeclimate.json -H 'Content-Type: application/json' -H 'User-Agent: Code Climate (PHP Test Reporter v0.1.1)' https://codeclimate.com/test_reports"
+
+addons:
+  code_climate:
+    repo_token: 3b4f67c7fd338056cca8c0a0a6b9af2d59f9659dc2a2ff8c1a666f948f4465b9
