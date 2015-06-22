@@ -15,7 +15,7 @@
     ],
     "support": {
         "issues": "https://github.com/FlameCore/Seabreeze/issues",
-        "source": "https://github.com/FlameCore/Seabreeze"
+        "wiki": "https://github.com/FlameCore/Seabreeze/wiki"
     },
     "require": {
         "php": ">=5.4",
@@ -39,8 +39,5 @@
             "FlameCore\\Seabreeze\\Tests\\": "tests/"
         }
     },
-    "bin": ["breeze"],
-    "config": {
-        "bin-dir": "bin"
-    }
+    "bin": ["breeze"]
 }
