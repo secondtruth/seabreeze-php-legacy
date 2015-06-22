@@ -1,0 +1,6 @@
+synchronizers:
+  files:
+    from:
+      dir: ./source
+    to:
+      - { dir: ./target }
