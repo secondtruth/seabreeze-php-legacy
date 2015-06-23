@@ -62,6 +62,6 @@ class InitializeCommand extends Command
         $project = Project::create($directory, $name);
         $project->flush();
 
-        $output->writeln("New project initialized.");
+        $output->writeln(sprintf('New %s initialized.', $name ? 'project "'.$name.'"' : 'project'));
     }
 }
