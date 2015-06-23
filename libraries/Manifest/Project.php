@@ -209,6 +209,28 @@ class Project implements ManifestInterface
 
     /**
      * @param string $directory
+     * @param string $name
+     * @return \FlameCore\Seabreeze\Manifest\Project
+     */
+    public static function create($directory, $name = null)
+    {
+        $manifestDir = self::makeManifestPath($directory);
+
+        if (!is_dir($manifestDir)) {
+            mkdir($manifestDir, 0777, true);
+        }
+
+        $project = new self($directory);
+
+        if ($name) {
+            $project->setName($name);
+        }
+
+        return $project;
+    }
+
+    /**
+     * @param string $directory
      * @return bool
      */
     public static function exists($directory)
@@ -223,10 +245,10 @@ class Project implements ManifestInterface
 
     /**
      * @param string $directory
-     * @param string $manifest
+     * @param string $file
      * @return string
      */
-    private static function makeManifestPath($directory, $manifest)
+    private static function makeManifestPath($directory, $file = null)
     {
         if (!is_dir($directory)) {
             throw new \DomainException(sprintf('Directory "%s" does not exist.', $directory));
@@ -234,10 +256,14 @@ class Project implements ManifestInterface
 
         $manifestDir = $directory.DIRECTORY_SEPARATOR.'.seabreeze';
 
+        if (!$file) {
+            return $manifestDir;
+        }
+
         if (!is_dir($manifestDir)) {
             throw new \LogicException(sprintf('Directory "%s" contains no manifest.', $directory));
         }
 
-        return $manifestDir.DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $manifest);
+        return $manifestDir.DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $file);
     }
 }

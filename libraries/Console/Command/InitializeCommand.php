@@ -57,12 +57,9 @@ class InitializeCommand extends Command
             throw new \DomainException(sprintf('Directory does already contain a manifest.', $directory));
         }
 
-        $project = new Project($directory);
+        $name = $input->getOption('name');
 
-        if ($name = $input->getOption('name')) {
-            $project->setName($name);
-        }
-
+        $project = Project::create($directory, $name);
         $project->flush();
 
         $output->writeln("New project initialized.");
