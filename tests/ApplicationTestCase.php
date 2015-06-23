@@ -44,8 +44,6 @@ abstract class ApplicationTestCase extends \PHPUnit_Framework_TestCase
         $this->workspace = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.time().rand(0, 1000);
         mkdir($this->workspace, 0777, true);
         $this->workspace = realpath($this->workspace);
-
-        $this->copyFixtures();
     }
 
     public function tearDown()

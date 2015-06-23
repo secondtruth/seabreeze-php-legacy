@@ -25,7 +25,6 @@ namespace FlameCore\Seabreeze\Tests;
 
 use FlameCore\Seabreeze\Console\Application;
 use FlameCore\Seabreeze\Console\Command\DeployCommand;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -47,6 +46,7 @@ class ApplicationDeployTest extends ApplicationTestCase
     {
         parent::setUp();
 
+        $this->copyFixtures();
         $this->fillWorkspace();
     }
 
