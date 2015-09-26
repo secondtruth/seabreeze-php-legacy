@@ -41,5 +41,5 @@
             "FlameCore\\Seabreeze\\Tests\\": "tests/"
         }
     },
-    "bin": ["breeze"]
+    "bin": ["bin/breeze"]
 }
