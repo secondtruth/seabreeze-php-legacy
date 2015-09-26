@@ -21,23 +21,25 @@
  * @license  ISC License <http://opensource.org/licenses/ISC>
  */
 
-namespace FlameCore\Seabreeze\Runner;
+namespace FlameCore\Seabreeze\Runner\Tasks;
 
 use FlameCore\Seabreeze\Manifest\Environment;
+use FlameCore\Seabreeze\Runner\CommandsRunner;
 
 /**
- * The TasksRunner class
+ * The AbstractTasksRunner class
  *
  * @author   Christian Neff <christian.neff@gmail.com>
  */
-class LocalTasksRunner extends CommandsRunner
+abstract class AbstractTasksRunner extends CommandsRunner
 {
     /**
      * {@inheritdoc}
      */
     protected function getCommands(Environment $environment)
     {
-        return $environment->getTasks('before');
+        $type = $this->getTasksType();
+        return $environment->getTasks($type);
     }
 
     /**
@@ -46,7 +48,8 @@ class LocalTasksRunner extends CommandsRunner
     protected function onRunnerStart($commands)
     {
         if ($this->observer) {
-            $this->observer->notify('tasks.start', ['total' => count($commands), 'type' => 'local']);
+            $type = $this->getTasksType();
+            $this->observer->notify('tasks.start', ['total' => count($commands), 'type' => $type]);
         }
     }
 
@@ -79,4 +82,9 @@ class LocalTasksRunner extends CommandsRunner
             $this->observer->notify('task.finish', $result);
         }
     }
+
+    /**
+     * @return string
+     */
+    abstract protected function getTasksType();
 }

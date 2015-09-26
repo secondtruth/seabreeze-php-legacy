@@ -21,9 +21,10 @@
  * @license  ISC License <http://opensource.org/licenses/ISC>
  */
 
-namespace FlameCore\Seabreeze\Runner;
+namespace FlameCore\Seabreeze\Runner\Tests;
 
 use FlameCore\Seabreeze\Manifest\Environment;
+use FlameCore\Seabreeze\Runner\CommandsRunner;
 
 /**
  * The TestsRunner class
