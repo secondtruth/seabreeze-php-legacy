@@ -15,8 +15,6 @@
 
 namespace FlameCore\Seabreeze\Manifest;
 
-use Symfony\Component\Yaml\Yaml;
-
 /**
  * The Project manifest
  *
@@ -152,7 +150,7 @@ class Project implements ManifestInterface
      */
     public function writeManifest(ManifestInterface $object, $mustExist = false)
     {
-        $filename = self::makeManifestPath($this->path, "$object.yml");
+        $filename = self::makeManifestPath($this->path, "$object.json");
         $directory = dirname($filename);
 
         if (!is_dir($directory)) {
@@ -169,8 +167,7 @@ class Project implements ManifestInterface
             }
         }
 
-        $yaml = Yaml::dump($object->export(), 4, 2);
-        file_put_contents($filename, $yaml);
+        self::writeJson($filename, $object->export());
     }
 
     /**
@@ -179,16 +176,16 @@ class Project implements ManifestInterface
      */
     public static function fromDirectory($directory)
     {
-        $configuration = Yaml::parse(self::makeManifestPath($directory, 'config.yml'));
+        $configuration = self::readJson(self::makeManifestPath($directory, 'config.json'));
 
         $project = new self($directory);
         $project->import($configuration);
 
         $iterator = new \DirectoryIterator(self::makeManifestPath($directory, 'environments'));
         foreach ($iterator as $file) {
-            if ($file->isFile() && $file->getExtension() == 'yml') {
-                $name = $file->getBasename('.yml');
-                $settings = Yaml::parse($file->getRealPath());
+            if ($file->isFile() && $file->getExtension() == 'json') {
+                $name = $file->getBasename('.json');
+                $settings = self::readJson($file->getRealPath());
 
                 $environment = new Environment($name, $project);
                 $environment->import($settings);
@@ -212,7 +209,7 @@ class Project implements ManifestInterface
             mkdir($manifestDir, 0777, true);
         }
 
-        $project = new self($directory);
+        $project = new static($directory);
 
         if ($name) {
             $project->setName($name);
@@ -228,7 +225,7 @@ class Project implements ManifestInterface
     public static function exists($directory)
     {
         try {
-            self::makeManifestPath($directory, 'config.yml');
+            self::makeManifestPath($directory, 'config.json');
             return true;
         } catch (\LogicException $e) {
             return false;
@@ -257,5 +254,15 @@ class Project implements ManifestInterface
         }
 
         return $manifestDir.DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $file);
+    }
+
+    private static function readJson($file)
+    {
+        return json_decode(file_get_contents($file), true);
+    }
+
+    private static function writeJson($file, array $data)
+    {
+        file_put_contents($file, json_encode($data));
     }
 }

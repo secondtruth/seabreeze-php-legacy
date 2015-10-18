@@ -45,6 +45,6 @@ class ApplicationInitTest extends ApplicationTestCase
         $dir = $this->workspace.DIRECTORY_SEPARATOR.'.seabreeze';
 
         $this->assertFileExists($dir);
-        $this->assertFileExists($dir.DIRECTORY_SEPARATOR.'config.yml');
+        $this->assertFileExists($dir.DIRECTORY_SEPARATOR.'config.json');
     }
 }
